@@ -19,12 +19,12 @@ public class PetriDish implements iPetri {
     private List<ParticleType> types;
 
     private double VELOCITY;
-    private double DISTANCE_MIN = 0.25;
+    private double DISTANCE_MIN = 0.001;
     private double DISTANCE_MAX = 0.3;
 
 
     public PetriDish() {
-        this.isUniformDistribution = true;
+        this.isUniformDistribution = false;
         this.particlesAmount = INITIAL_PARTICLES_AMOUNT;
         this.typesAmount = 1;
         this.sower = Sower.GRID;
@@ -44,13 +44,22 @@ public class PetriDish implements iPetri {
         if (particles.isEmpty()) generate();
         for (int i = 0; i < particles.size(); i++) {
             for (int j = i + 1; j < particles.size(); j++) {
-                particles.get(i).interact(particles.get(j), DISTANCE_MIN, DISTANCE_MAX);
+                Particle p1 = particles.get(i);
+                Particle p2 = particles.get(j);
+                double distance = getDistanceBetween(p1, p2);
+                p1.interact(p2, DISTANCE_MIN, DISTANCE_MAX, distance);
+                p2.interact(p1, DISTANCE_MIN, DISTANCE_MAX, distance);
+
             }
         }
         particles.forEach(p -> {
             update(p);
             pushToCenter(p.getCoordinate());
         });
+    }
+
+    private double getDistanceBetween(Particle p1, Particle p2) {
+        return Coordinate.getDistance(p1.getCoordinate(), p2.getCoordinate());
     }
 
     public void update(Particle p) {
@@ -71,9 +80,9 @@ public class PetriDish implements iPetri {
         double y = coordinate.getY();
         if (Math.abs(x) > 1) {
             coordinate.setX(jumpToOtherSide(x));
+
         }
         if (Math.abs(y) > 1) {
-
             coordinate.setY(jumpToOtherSide(y));
         }
     }
@@ -161,10 +170,6 @@ public class PetriDish implements iPetri {
         return 0.5 * scale * (1 + particles.get(i).getCoordinate().getY());
     }
 
-    public double getScale() {
-        return scale;
-    }
-
     public Paint getParticleColor(int i) {
         return particles.get(i).getType().getColor();
     }
@@ -172,5 +177,6 @@ public class PetriDish implements iPetri {
     public void setParticlesAmount(int particlesAmount) {
         this.particlesAmount = Math.max(particlesAmount, 50);
         generate();
+        System.out.println(particles.size());
     }
 }

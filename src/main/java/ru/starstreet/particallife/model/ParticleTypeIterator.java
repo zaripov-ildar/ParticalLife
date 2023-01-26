@@ -3,8 +3,8 @@ package ru.starstreet.particallife.model;
 import java.util.List;
 
 public class ParticleTypeIterator {
-    private boolean isUniformDistribution;
-    private List<ParticleType> types;
+    private final boolean isUniformDistribution;
+    private final List<ParticleType> types;
     private int count;
 
     public ParticleTypeIterator(boolean isUniformDistribution, List<ParticleType> types) {
