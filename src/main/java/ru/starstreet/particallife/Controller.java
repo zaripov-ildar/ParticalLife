@@ -2,10 +2,8 @@ package ru.starstreet.particallife;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
@@ -80,10 +78,11 @@ public class Controller implements Initializable {
 
     private void initField() {
         int size = petri.getParticles().size();
+        System.out.println("from initField" + size);
         updateScale();
         petri.setScale(scale);
-        circles = new ArrayList<>(size);
         canvas.getChildren().clear();
+        circles = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             double x = petri.getX(i);
             double y = petri.getY(i);
@@ -91,16 +90,15 @@ public class Controller implements Initializable {
             c.setFill(petri.getParticles().get(i).getType().getColor());
             circles.add(c);
         }
-        Group group = new Group();
-        group.getChildren().addAll(circles);
+//        Group group = new Group();
+//        group.getChildren().addAll(circles);
         canvas.setStyle("-fx-background-color: black");
-        canvas.getChildren().add(group);
+        canvas.getChildren().addAll(circles);
 
         velocityField.setText(String.valueOf(petri.getVELOCITY()));
         minDistanceField.setText(String.valueOf(petri.getDISTANCE_MIN()));
         maxDistanceField.setText(String.valueOf(petri.getDISTANCE_MAX()));
     }
-
 
 
     private void initListeners() {
@@ -218,6 +216,7 @@ public class Controller implements Initializable {
                         circles.get(i).setCenterY(y);
                         circles.get(i).fillProperty().set(petri.getParticleColor(i));
                     }
+
                 });
             }
         });
@@ -227,9 +226,9 @@ public class Controller implements Initializable {
 
     public void setParticlesAmount(ActionEvent actionEvent) {
 
-            petri.setParticlesAmount(Integer.parseInt(particlesAmountField.getText()));
-            particlesAmountField.setText(String.valueOf(petri.getParticlesAmount()));
-            initField();
+        petri.setParticlesAmount(Integer.parseInt(particlesAmountField.getText()));
+        particlesAmountField.setText(String.valueOf(petri.getParticlesAmount()));
+        initField();
 
         System.out.println(circles.size() + "\t" + petri.getParticlesAmount());
 

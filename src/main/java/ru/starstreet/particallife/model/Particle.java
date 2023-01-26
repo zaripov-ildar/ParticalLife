@@ -17,17 +17,12 @@ public class Particle {
         this.delta = new Coordinate(0, 0);
     }
 
-    public void interact(Particle p, double DISTANCE_MIN, double DISTANCE_MAX) {
-        double distance = Coordinate.getDistance(coordinate, p.coordinate);
-        influence(this, p, distance, DISTANCE_MIN, DISTANCE_MAX);
-        influence(p, this, distance, DISTANCE_MIN, DISTANCE_MAX);
 
-    }
 
-    private void influence(Particle p1, Particle p2, double distance, double DISTANCE_MIN, double DISTANCE_MAX) {
-        double attractionCoefficient = getAttractionCoefficient(p1, p2, distance, DISTANCE_MIN, DISTANCE_MAX);
-        double dx = p2.coordinate.getX() - p1.coordinate.getX();
-        double dy = p2.coordinate.getY() - p1.coordinate.getY();
+    public void interact(Particle p, double distance, double DISTANCE_MIN, double DISTANCE_MAX) {
+        double attractionCoefficient = getAttractionCoefficient(this, p, distance, DISTANCE_MIN, DISTANCE_MAX);
+        double dx = p.coordinate.getX() - this.coordinate.getX();
+        double dy = p.coordinate.getY() - this.coordinate.getY();
         delta.add(dx * attractionCoefficient + delta.getX(), dy * attractionCoefficient + delta.getY());
     }
 
